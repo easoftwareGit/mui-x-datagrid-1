@@ -1,0 +1,38 @@
+1) install the grid package
+  A) in the terminal, run the following command:
+        npm i @mui/x-data-grid
+2) install the dependencies
+  A) in the terminal, run the following commands:
+        npm install @emotion/react
+        npm install @emotion/styled
+        npm i @mui/icons-material
+        npm i @mui/x-data-grid
+        npm i @mui/x-data-grid-generator
+        npm i @mui/material
+  B) if any packages do not install, run the following command:
+        npm i package-name --legacy-peer-deps
+3) open src/app/page.tsx
+  A) delect all code
+  B) paste new code:
+        export default function Home() {  
+          return (
+            <div>
+              <h1>Home Page</h1>
+            </div>
+          )
+        }  
+4) create src/app/grid1.tsx 
+  A) copy sample code from https://mui.com/x/react-data-grid/
+  B) paste code into grid1.tsx
+  C) create a new blank line at the top of the code
+  D) paste the following code into the new line:
+        "use client"
+  E) save the file
+5) edit src/app/page.tsx  
+  A) at the top of the file, add the following code:
+        import Grid1 from "./grid1";
+  b) after the <h1>Home Page</h1> tag, add the following code:
+        <Grid1 />
+  C) save the file
+6) in the terminal, run the following command:
+        npm run dev

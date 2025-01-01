@@ -1,0 +1,9 @@
+.cellError {
+  background-color: rgb(255, 98, 98);
+}
+
+/* format header cells - start */
+.my-grid-header {  
+  background-color: rgb(218, 246, 255);
+}
+/* format header cells - end */
