@@ -655,9 +655,7 @@ export default function Grid10() {
       type: 'number',
       width: 100,
       align: 'right',
-      headerAlign: 'right',  
-      valueSetter: setBrktsFee1,
-      valueGetter: (value, row) => isValidNumBrkts(row.numBrkts1) ? row.numBrkts1 * brktFee : 0,
+      headerAlign: 'right',              
       valueFormatter: (value?: number) => currencyFormatter.format(value!),
     },
     {
