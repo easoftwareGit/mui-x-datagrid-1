@@ -2,8 +2,12 @@
   background-color: rgb(255, 98, 98);
 }
 
-/* format header cells - start */
 .my-grid-header {  
   background-color: rgb(218, 246, 255);
 }
-/* format header cells - end */
+
+/* summaries in header formatted background - start */
+.sumHeader {
+  background-color: rgb(159, 255, 163);
+}
+/* summaries in header formatted background - end */
