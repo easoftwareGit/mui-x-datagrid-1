@@ -776,7 +776,8 @@ export default function Grid11() {
   return (
     <>      
       <h3>Grid 11 (expaning on Grid 10)</h3>
-      <p>one valueSetter for multiple columns</p>      
+      <p>one valueSetter for multiple columns</p>    
+      <p>summaries in header formatted background</p>
       <div
         id='my_grid'
         style={{ height: 500, width: '100%', overflow: 'auto' }}
