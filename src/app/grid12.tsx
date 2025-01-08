@@ -2,9 +2,9 @@
 /* eslint-disable react/jsx-key */
 "use client";
 
-// one valueSetter for multiple columns
-// summaries in header formatted background
-// https://mui.com/x/react-data-grid/editing/#value-parser-and-value-setter
+// update total in processRowUpdate 
+// removed valueSetter for numBrkts
+// https://mui.com/x/react-data-grid/editing/#the-processrowupdate-callback
 
 import * as React from 'react';
 import Button from '@mui/material/Button';
@@ -30,6 +30,8 @@ import {
   GridCellParams,
   GridEditInputCell,
   GridColumnGroupingModel,
+  GridCellEditStopParams,
+  MuiEvent,
 } from '@mui/x-data-grid';
 import {
   randomCreatedDate,
@@ -195,7 +197,7 @@ declare module '@mui/x-data-grid' {
   }
 }
 
-export default function Grid11() {    
+export default function Grid12() {    
   const [gridEditMode, setGridEditMode] = React.useState<'cell' | 'row'>('cell');  
   const [rows, setRows] = React.useState(initialRows);
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});  
@@ -318,8 +320,7 @@ export default function Grid11() {
       ],
     },
   ];  
-
-  // one group row is a summary of the column - start
+  
   React.useEffect(() => {
     const feeTotal = rows.reduce((total, row) => total + Number(row.fee), 0);
     const potsTotal = rows.reduce((total, row) => total + (row.checkAmount as number), 0);
@@ -332,8 +333,7 @@ export default function Grid11() {
     setPotsTotal(potsTotal);
     setBrktsTotals(brktsTotals);
     setOverAllTotal(overAllTotal);
-  }, [rows]);
-  // one group row is a summary of the column - end
+  }, [rows]);  
 
   const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
     setGridEditMode('cell');           
@@ -424,8 +424,7 @@ export default function Grid11() {
   const handleDebugClick = () => { 
     console.log('rows', rows);
   };    
-
-  // show error message for first found error - start
+  
   const handleErrorMsgClick = () => {
     let errMsg = '';
     for (let i = 0; i < rows.length; i++) {
@@ -451,12 +450,24 @@ export default function Grid11() {
       alert(errMsg);
     }
   }
-  // show error message for first found error - end
 
   const processRowUpdate = (newRow: GridRowModel) => {
 
-    setGridEditMode('cell');        
-    const updatedRow = { ...newRow, isNew: false };
+    setGridEditMode('cell');  
+    // update total in processRowUpdate - start
+    const brktfee1 = newRow.numBrkts1 as number * 5;
+    const brktfee2 = newRow.numBrkts2 as number * 5;
+    const total = newRow.checkAmount as number + brktfee1 + brktfee2;
+    // update total in processRowUpdate - end
+    const updatedRow = {
+      ...newRow,      
+      // update total in processRowUpdate - start      
+      numBrktsFee1: brktfee1,
+      numBrktsFee2: brktfee2,
+      total: total,
+      // update total in processRowUpdate - end
+      isNew: false
+    };    
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
     return updatedRow;
   };
@@ -523,8 +534,7 @@ export default function Grid11() {
     }))
     setPotsTotal(newPotsTotal);
   }
-
-  // one valueSetter for multiple columns - start
+  
   const setBrktsFee = (value: number, row: GridRowModel, column: GridColDef) => {
     const numBrkts = value ? Math.trunc(Number(value)) : 0;    
     let brktsFee = 0;
@@ -550,8 +560,7 @@ export default function Grid11() {
       [brktsFeeName]: brktsFee,
       total: total,
     }    
-  }
-  // one valueSetter for multiple columns
+  }  
   
   const columns: GridColDef[] = [
     {
@@ -657,10 +666,10 @@ export default function Grid11() {
             min: minBrkts,
           }}
         />
-      ),
-      // one valueSetter for multiple columns - start
-      valueSetter: setBrktsFee,           
-      // one valueSetter for multiple columns - end
+      ),      
+      // removed valueSetter for numBrkts - start
+      // valueSetter: setBrktsFee,               
+      // removed valueSetter for numBrkts - end
       cellClassName: params => applyBrktCellColor(params.value as number),
     },    
     {
@@ -690,10 +699,10 @@ export default function Grid11() {
             min: minBrkts,
           }}
         />
-      ),
-      // one valueSetter for multiple columns - start
-      valueSetter: setBrktsFee,      
-      // one valueSetter for multiple columns - end
+      ),      
+      // removed valueSetter for numBrkts - start
+      // valueSetter: setBrktsFee,            
+      // removed valueSetter for numBrkts - end
       cellClassName: params => applyBrktCellColor(params.value as number),
     },    
     {
@@ -776,9 +785,9 @@ export default function Grid11() {
 
   return (
     <>      
-      <h3>Grid 11 (expaning on Grid 10)</h3>
-      <p>one valueSetter for multiple columns</p>    
-      <p>summaries in header formatted background</p>
+      <h3>Grid 12 (expaning on Grid 11)</h3>
+      <p>update totals in processRowUpdate</p>   
+      <p>removed valueSetter for numBrkts</p>
       <div
         id='my_grid'
         style={{ height: 500, width: '100%', overflow: 'auto' }}

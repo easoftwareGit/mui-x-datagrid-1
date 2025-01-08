@@ -3,6 +3,7 @@
 import Grid1 from "./grid1";
 import Grid10 from "./grid10";
 import Grid11 from "./grid11";
+import Grid12 from "./grid12";
 import Grid2 from "./grid2";
 import Grid3 from "./grid3";
 import Grid4 from "./grid4";
@@ -26,7 +27,8 @@ export default function Home() {
       {/* <Grid8 /> */}
       {/* <Grid9 /> */}
       {/* <Grid10 /> */}
-      <Grid11 />
+      {/* <Grid11 /> */}
+      <Grid12 />
     </div>
   )
 }
