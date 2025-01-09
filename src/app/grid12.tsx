@@ -451,23 +451,25 @@ export default function Grid12() {
     }
   }
 
-  const processRowUpdate = (newRow: GridRowModel) => {
+  const processRowUpdate = (newRow: GridRowModel, oldRow: GridRowModel) => {
 
     setGridEditMode('cell');  
-    // update total in processRowUpdate - start
-    const brktfee1 = newRow.numBrkts1 as number * 5;
-    const brktfee2 = newRow.numBrkts2 as number * 5;
-    const total = newRow.checkAmount as number + brktfee1 + brktfee2;
-    // update total in processRowUpdate - end
+    // update total in processRowUpdate - start    
+    const feeCols = ['numBrkts1', 'numBrkts2'];
+    const updateFessRow = { ...newRow };    
+    Object.entries(newRow).forEach(([key]) => {
+      if (feeCols.includes(key) && oldRow[key] !== newRow[key]) {
+        const feeName = key.substring(0, key.length - 1) + 'Fee' + key.substring(key.length - 1);
+        updateFessRow[feeName] = (updateFessRow[key] as number) * 5;
+        updateFessRow.total = (updateFessRow.total as number)
+          + (updateFessRow[feeName] as number) - (oldRow[feeName] as number);
+      }
+    })    
     const updatedRow = {
-      ...newRow,      
-      // update total in processRowUpdate - start      
-      numBrktsFee1: brktfee1,
-      numBrktsFee2: brktfee2,
-      total: total,
-      // update total in processRowUpdate - end
+      ...updateFessRow,            
       isNew: false
-    };    
+    };
+    // update total in processRowUpdate - end    
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
     return updatedRow;
   };
@@ -535,32 +537,34 @@ export default function Grid12() {
     setPotsTotal(newPotsTotal);
   }
   
-  const setBrktsFee = (value: number, row: GridRowModel, column: GridColDef) => {
-    const numBrkts = value ? Math.trunc(Number(value)) : 0;    
-    let brktsFee = 0;
-    if (isValidNumBrkts(numBrkts)) {
-      brktsFee = numBrkts * brktFee;
-    }
-    const brktNum = column.field[column.field.length - 1];    
-    const brktsFeeName = 'numBrktsFee' + brktNum;
-    let total = row.checkAmount;
+  // removed valueSetter for numBrkts - start 
+  // const setBrktsFee = (value: number, row: GridRowModel, column: GridColDef) => {
+  //   const numBrkts = value ? Math.trunc(Number(value)) : 0;    
+  //   let brktsFee = 0;
+  //   if (isValidNumBrkts(numBrkts)) {
+  //     brktsFee = numBrkts * brktFee;
+  //   }
+  //   const brktNum = column.field[column.field.length - 1];    
+  //   const brktsFeeName = 'numBrktsFee' + brktNum;
+  //   let total = row.checkAmount;
 
-    for (const key in row) {
-      if (key.startsWith('numBrktsFee')) {
-        if (key === brktsFeeName) { // if the current numBrktsFee column
-           total += brktsFee;       // use the calculated value
-        } else {                    // else another numBrktsFee column
-          total += row[key];        // use the value from the row
-        }
-      }
-    }
-    return { 
-      ...row,
-      [column.field]: numBrkts,
-      [brktsFeeName]: brktsFee,
-      total: total,
-    }    
-  }  
+  //   for (const key in row) {
+  //     if (key.startsWith('numBrktsFee')) {
+  //       if (key === brktsFeeName) { // if the current numBrktsFee column
+  //          total += brktsFee;       // use the calculated value
+  //       } else {                    // else another numBrktsFee column
+  //         total += row[key];        // use the value from the row
+  //       }
+  //     }
+  //   }
+  //   return { 
+  //     ...row,
+  //     [column.field]: numBrkts,
+  //     [brktsFeeName]: brktsFee,
+  //     total: total,
+  //   }    
+  // }  
+  // removed valueSetter for numBrkts - end
   
   const columns: GridColDef[] = [
     {
